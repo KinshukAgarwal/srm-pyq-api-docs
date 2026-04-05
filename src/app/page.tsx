@@ -43,7 +43,7 @@ const endpointDocs: EndpointDoc[] = [
     id: "health",
     method: "GET",
     path: "/health",
-    summary: "Liveness endpoint for fast health checks.",
+    summary: "Health check endpoint for verifying the SRM PYQ API is running and responsive.",
     pathParams: [],
     queryParams: [],
     codeExamples: {
@@ -109,7 +109,7 @@ puts data`,
     id: "list-courses",
     method: "GET",
     path: "/v1/courses",
-    summary: "List courses with optional search and cursor pagination.",
+    summary: "Browse and search the SRM course catalog with cursor-based pagination. Filter courses by code or name to find the right exam papers.",
     pathParams: [],
     queryParams: [
       {
@@ -228,7 +228,7 @@ puts payload["page"]`,
     id: "get-course",
     method: "GET",
     path: "/v1/courses/{course_code}",
-    summary: "Get one course by exact course_code.",
+    summary: "Retrieve full details for a specific SRM course including department, program, and semester information.",
     pathParams: [
       {
         name: "course_code",
@@ -328,7 +328,7 @@ puts data["data"]`,
     id: "list-course-papers",
     method: "GET",
     path: "/v1/courses/{course_code}/papers",
-    summary: "List papers for a course with optional year/term filters and cursor paging.",
+    summary: "List all previous year question papers for a given SRM course. Filter by exam year or term to find specific papers.",
     pathParams: [
       {
         name: "course_code",
@@ -483,7 +483,7 @@ puts payload["page"]`,
     id: "get-paper",
     method: "GET",
     path: "/v1/papers/{paper_id}",
-    summary: "Get a single paper with normalized metadata and minimal course linkage.",
+    summary: "Get detailed metadata for a specific SRM question paper including exam year, term, and source information.",
     pathParams: [
       {
         name: "paper_id",
@@ -589,7 +589,7 @@ puts data["data"]`,
     id: "list-paper-files",
     method: "GET",
     path: "/v1/papers/{paper_id}/files",
-    summary: "List file records for a paper, including computed public_url when applicable.",
+    summary: "List all PDF files attached to a question paper, including storage details and public download URLs.",
     pathParams: [
       {
         name: "paper_id",
@@ -688,7 +688,7 @@ puts files`,
     id: "get-download-url",
     method: "GET",
     path: "/v1/files/{file_id}/download",
-    summary: "Return either a public URL or a signed URL for downloading the PDF.",
+    summary: "Generate a time-limited signed URL or retrieve a public link to download SRM question paper PDFs.",
     pathParams: [
       {
         name: "file_id",
@@ -943,13 +943,17 @@ export default function Home() {
                 <h1 className="max-w-4xl text-5xl font-medium tracking-[-0.04em] text-foreground md:text-7xl lg:text-8xl">
                   SRM PYQ API
                 </h1>
+                <p className="mt-4 text-lg font-normal tracking-tight text-text-muted md:text-xl md:mt-6">
+                  Access Previous Year Question Papers
+                </p>
               </ScrollReveal>
 
               <ScrollReveal delay={150}>
                 <p className="max-w-2xl text-lg leading-relaxed text-text-muted md:text-xl">
-                  A comprehensive read-only HTTP JSON API for accessing SRM previous year question papers. 
-                  No authentication required. Built for developers building educational tools, chatbots, 
-                  and study applications.
+                  A comprehensive read-only REST API for accessing SRM university previous year question papers 
+                  and exam materials. No authentication required. Built for developers creating study apps, 
+                  exam preparation tools, and educational platforms that need programmatic access to 
+                  SRM course papers and question paper data.
                 </p>
               </ScrollReveal>
 
@@ -961,7 +965,7 @@ export default function Home() {
                   >
                     <span className="font-medium">Explore Endpoints</span>
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black/20 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-105">
-                      <svg className="h-4 w-4 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg aria-label="Explore endpoints" role="img" className="h-4 w-4 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                       </svg>
                     </span>
@@ -973,7 +977,7 @@ export default function Home() {
                   >
                     <span>Download Reference</span>
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-y-0.5 group-hover:scale-105 group-hover:bg-accent/20">
-                      <svg className="h-4 w-4 transition-colors group-hover:text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg aria-label="Download reference file" role="img" className="h-4 w-4 transition-colors group-hover:text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                       </svg>
                     </span>
@@ -1007,7 +1011,7 @@ export default function Home() {
                 <div className="bezel-outer max-w-xl">
                   <div className="bezel-inner flex items-center gap-4 p-5">
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-500/10">
-                      <svg className="h-5 w-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <svg aria-label="Base URL" role="img" className="h-5 w-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
                       </svg>
                     </div>
@@ -1032,7 +1036,9 @@ export default function Home() {
                     Data Models
                   </h2>
                   <p className="max-w-2xl text-base leading-relaxed text-text-muted">
-                    Core entities returned by the API. All responses are wrapped in a <code className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-accent">data</code> key.
+                    Core entities returned by the SRM PYQ API. Each response follows a consistent JSON schema 
+                    wrapped in a <code className="rounded bg-white/5 px-1.5 py-0.5 font-mono text-xs text-accent">data</code> key, making it straightforward to integrate SRM exam paper data into 
+                    your applications.
                   </p>
                 </div>
               </ScrollReveal>
@@ -1043,11 +1049,11 @@ export default function Home() {
                     <div className="bezel-inner h-full p-6">
                       <div className="mb-4 flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
-                          <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <svg aria-label="Course model" role="img" className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
                           </svg>
                         </div>
-                        <h3 className="text-lg font-medium text-foreground">Course</h3>
+                        <h3 className="text-lg font-medium text-foreground">Course — SRM Course Catalog Entry</h3>
                       </div>
                       <CodeBlock
                         code={`{
@@ -1069,11 +1075,11 @@ export default function Home() {
                     <div className="bezel-inner h-full p-6">
                       <div className="mb-4 flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10">
-                          <svg className="h-4 w-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <svg aria-label="Paper model" role="img" className="h-4 w-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                           </svg>
                         </div>
-                        <h3 className="text-lg font-medium text-foreground">Paper</h3>
+                        <h3 className="text-lg font-medium text-foreground">Paper — Exam Question Paper Record</h3>
                       </div>
                       <CodeBlock
                         code={`{
@@ -1099,11 +1105,11 @@ export default function Home() {
                     <div className="bezel-inner h-full p-6">
                       <div className="mb-4 flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10">
-                          <svg className="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <svg aria-label="File model" role="img" className="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                           </svg>
                         </div>
-                        <h3 className="text-lg font-medium text-foreground">File</h3>
+                        <h3 className="text-lg font-medium text-foreground">File — Question Paper PDF Metadata</h3>
                       </div>
                       <CodeBlock
                         code={`{
@@ -1130,11 +1136,11 @@ export default function Home() {
                     <div className="bezel-inner h-full p-6">
                       <div className="mb-4 flex items-center gap-3">
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/10">
-                          <svg className="h-4 w-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <svg aria-label="Download reference" role="img" className="h-4 w-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                           </svg>
                         </div>
-                        <h3 className="text-lg font-medium text-foreground">Download Response</h3>
+                        <h3 className="text-lg font-medium text-foreground">Download Response — Signed PDF Access URL</h3>
                       </div>
                       <CodeBlock
                         code={`{
@@ -1164,8 +1170,9 @@ export default function Home() {
                     API Endpoints
                   </h2>
                   <p className="max-w-2xl text-base leading-relaxed text-text-muted">
-                    Complete endpoint reference with live request testing. Each endpoint includes code examples in 
-                    Python, cURL, JavaScript, Go, PHP, and Ruby — plus an interactive playground to test against the production API.
+                    Complete reference for every SRM PYQ API endpoint with live request testing. Each endpoint 
+                    includes runnable code examples in Python, cURL, JavaScript, Go, PHP, and Ruby — plus an 
+                    interactive playground to test queries against the production API in real time.
                   </p>
                 </div>
               </ScrollReveal>
@@ -1215,7 +1222,7 @@ export default function Home() {
                     Guides
                   </div>
                   <h2 className="text-4xl font-medium tracking-[-0.03em] text-foreground md:text-5xl">
-                    Integration Patterns
+                    SRM API Integration Patterns
                   </h2>
                 </div>
               </ScrollReveal>
@@ -1227,10 +1234,11 @@ export default function Home() {
                       <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/10">
                         <span className="text-xl font-semibold text-accent">A</span>
                       </div>
-                      <h3 className="mb-2 text-lg font-medium text-foreground">Search & Drill Down</h3>
+                      <h3 className="mb-2 text-lg font-medium text-foreground">Search &amp; Drill Down</h3>
                       <p className="text-sm leading-relaxed text-text-muted">
-                        Search courses with <code className="rounded bg-white/5 px-1 py-0.5 font-mono text-xs text-accent">/v1/courses?q=</code>, 
-                        pick a course_code, fetch papers, get files, then download.
+                        Search the SRM course catalog with <code className="rounded bg-white/5 px-1 py-0.5 font-mono text-xs text-accent">/v1/courses?q=</code>, 
+                        select a course_code, fetch its previous year question papers, retrieve file metadata, 
+                        and download the PDF. Ideal for building study apps and exam preparation tools.
                       </p>
                     </div>
                   </div>
@@ -1244,8 +1252,8 @@ export default function Home() {
                       </div>
                       <h3 className="mb-2 text-lg font-medium text-foreground">Cursor Pagination</h3>
                       <p className="text-sm leading-relaxed text-text-muted">
-                        Walk list endpoints with <code className="rounded bg-white/5 px-1 py-0.5 font-mono text-xs text-accent">page.next_cursor</code> while 
-                        <code className="ml-1 rounded bg-white/5 px-1 py-0.5 font-mono text-xs text-accent">has_more</code> is true.
+                        Efficiently paginate through large SRM course and paper listings using <code className="rounded bg-white/5 px-1 py-0.5 font-mono text-xs text-accent">page.next_cursor</code> while 
+                        <code className="ml-1 rounded bg-white/5 px-1 py-0.5 font-mono text-xs text-accent">has_more</code> is true. This pattern ensures your app can handle the full SRM question paper catalog without missing results.
                       </p>
                     </div>
                   </div>
@@ -1260,7 +1268,7 @@ export default function Home() {
                       <h3 className="mb-2 text-lg font-medium text-foreground">Fresh Downloads</h3>
                       <p className="text-sm leading-relaxed text-text-muted">
                         Always request a fresh <code className="rounded bg-white/5 px-1 py-0.5 font-mono text-xs text-accent">/download</code> URL 
-                        right before fetching files. Signed URLs expire.
+                        right before fetching SRM question paper PDFs. Signed URLs expire after a set duration, so generate them on-demand for reliable paper downloads.
                       </p>
                     </div>
                   </div>
@@ -1277,7 +1285,7 @@ export default function Home() {
                     Handling
                   </div>
                   <h2 className="text-4xl font-medium tracking-[-0.03em] text-foreground md:text-5xl">
-                    Errors & Retries
+                    Error Handling &amp; Retry Strategies
                   </h2>
                 </div>
               </ScrollReveal>
@@ -1288,7 +1296,7 @@ export default function Home() {
                     <div className="bezel-inner p-6">
                       <div className="mb-4 flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10">
-                          <svg className="h-5 w-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <svg aria-label="Retry recommended" role="img" className="h-5 w-5 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                           </svg>
                         </div>
@@ -1307,7 +1315,7 @@ export default function Home() {
                     <div className="bezel-inner p-6">
                       <div className="mb-4 flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500/10">
-                          <svg className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <svg aria-label="Fix request first" role="img" className="h-5 w-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
                           </svg>
                         </div>

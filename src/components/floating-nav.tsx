@@ -75,6 +75,7 @@ export function FloatingNav({ activePage = "docs" }: FloatingNavProps) {
             }`}
           >
             <svg
+              aria-label="Support" role="img"
               className={`h-2.5 w-2.5 transition-colors duration-300 md:h-3 md:w-3 ${
                 isSupportPage ? "text-accent" : "text-foreground group-hover:text-accent"
               }`}

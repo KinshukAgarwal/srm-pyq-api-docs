@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
-// Email is kept server-side only - never exposed to client
-const CONTACT_EMAIL = "kinshuk1911@gmail.com";
-
-// Only initialize Resend if API key is available
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+const CONTACT_EMAIL = process.env.RESEND_TO_EMAIL;
 
 const ALLOWED_SUBJECTS = [
   "Custom Subject",
@@ -20,6 +16,9 @@ const ALLOWED_SUBJECTS = [
 
 export async function POST(request: NextRequest) {
   try {
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const resend = resendApiKey ? new Resend(resendApiKey) : null;
+
     const body = await request.json();
     const { name, email, subject, customSubject, message } = body;
 
@@ -61,15 +60,25 @@ export async function POST(request: NextRequest) {
 
     const finalSubject = subject === "Custom Subject" ? customSubject.trim() : subject;
 
+    if (!CONTACT_EMAIL) {
+      console.error("[contact] Missing RESEND_TO_EMAIL env var. This must be the same email as your Resend account in sandbox mode.");
+      return NextResponse.json(
+        { error: "Email service is not fully configured. Please try again later." },
+        { status: 500 }
+      );
+    }
+
     // Check if Resend is configured
     if (!resend) {
       // Log the message for development/testing when API key isn't set
+      console.warn("[contact] RESEND_API_KEY is not configured. Contact form email not sent.");
       console.log("=== Contact Form Submission (Email Service Not Configured) ===");
+      console.log(`To: ${CONTACT_EMAIL}`);
       console.log(`From: ${name} <${email}>`);
       console.log(`Subject: [SRM PYQ API] ${finalSubject}`);
       console.log(`Message: ${message}`);
-      console.log("To enable email delivery, add RESEND_API_KEY to .env.local");
-      console.log("Sign up at: https://resend.com (free tier: 100 emails/day)");
+      console.log("To enable email delivery on Vercel, add RESEND_API_KEY and RESEND_TO_EMAIL env vars.");
+      console.log("Sign up at: https://resend.com (free tier available)");
       console.log("==============================================================");
       
       return NextResponse.json({
@@ -79,8 +88,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Send email via Resend
-    const { error } = await resend.emails.send({
-      from: "SRM PYQ API <onboarding@resend.dev>",
+    const { data, error } = await resend.emails.send({
+      from: "Support <onboarding@resend.dev>",
       to: [CONTACT_EMAIL],
       replyTo: email,
       subject: `[SRM PYQ API] ${finalSubject}`,
@@ -107,19 +116,33 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
-      console.error("Resend error:", error);
+      console.error("[contact] Resend send failed", {
+        error,
+        to: CONTACT_EMAIL,
+        from: "Support <onboarding@resend.dev>",
+        replyTo: email,
+        subject: `[SRM PYQ API] ${finalSubject}`,
+      });
       return NextResponse.json(
         { error: "Failed to send message. Please try again later." },
         { status: 500 }
       );
     }
 
+    console.log("[contact] Resend email sent", {
+      id: data?.id,
+      to: CONTACT_EMAIL,
+      from: "Support <onboarding@resend.dev>",
+      replyTo: email,
+      subject: `[SRM PYQ API] ${finalSubject}`,
+    });
+
     return NextResponse.json({
       success: true,
       message: "Your message has been sent successfully!",
     });
   } catch (err) {
-    console.error("Contact form error:", err);
+    console.error("[contact] Unexpected contact form error:", err);
     return NextResponse.json(
       { error: "An unexpected error occurred. Please try again." },
       { status: 500 }

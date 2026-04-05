@@ -94,6 +94,7 @@ export default function SupportPage() {
         className="fixed left-4 top-4 z-40 flex items-center gap-2 rounded-full bg-white/5 px-3 py-2 text-xs font-medium text-text-muted backdrop-blur-xl transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] hover:bg-white/10 hover:text-foreground md:left-6 md:top-6 md:px-4 md:py-2.5 md:text-sm"
       >
         <svg
+          aria-label="Back to documentation" role="img"
           className="h-3.5 w-3.5 transition-transform duration-300 group-hover:-translate-x-0.5 md:h-4 md:w-4"
           fill="none"
           viewBox="0 0 24 24"
@@ -117,14 +118,15 @@ export default function SupportPage() {
 
           <ScrollReveal delay={100}>
             <h1 className="text-4xl font-medium tracking-[-0.04em] text-foreground md:text-5xl lg:text-6xl">
-              Get in Touch
+              Get in Touch with the SRM PYQ API Team
             </h1>
           </ScrollReveal>
 
           <ScrollReveal delay={150}>
             <p className="max-w-xl text-base leading-relaxed text-text-muted md:text-lg">
-              Found a bug? Have a feature request? We&apos;d love to hear from you. 
-              Your feedback helps us improve the API and documentation for everyone.
+              Found a bug in the SRM question papers API? Have a feature request or need help 
+              integrating previous year question paper data into your app? We&apos;d love to hear 
+              from you. Your feedback helps us improve the API and documentation for all developers.
             </p>
           </ScrollReveal>
         </section>
@@ -137,6 +139,7 @@ export default function SupportPage() {
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
                     <svg
+                      aria-label="Message sent successfully" role="img"
                       className="h-8 w-8 text-accent"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -155,7 +158,7 @@ export default function SupportPage() {
                   >
                     <span>Send Another Message</span>
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black/20 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105">
-                      <svg className="h-4 w-4 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <svg aria-label="Send another message" className="h-4 w-4 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                       </svg>
                     </span>
@@ -272,6 +275,7 @@ export default function SupportPage() {
                     <div className="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 p-4">
                       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-500/10">
                         <svg
+                          aria-label="Error" role="img"
                           className="h-4 w-4 text-red-400"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -297,6 +301,7 @@ export default function SupportPage() {
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-black/20 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:scale-105">
                       {submitState === "loading" ? (
                         <svg
+                          aria-label="Sending message" role="img"
                           className="h-4 w-4 animate-spin text-background"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -317,6 +322,7 @@ export default function SupportPage() {
                         </svg>
                       ) : (
                         <svg
+                          aria-label="Send message" role="img"
                           className="h-4 w-4 text-background"
                           fill="none"
                           viewBox="0 0 24 24"
@@ -345,6 +351,7 @@ export default function SupportPage() {
               <div className="bezel-inner flex h-full flex-col p-6">
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/10">
                   <svg
+                    aria-label="Bug reports" role="img"
                     className="h-5 w-5 text-violet-400"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -358,9 +365,9 @@ export default function SupportPage() {
                     />
                   </svg>
                 </div>
-                <h3 className="mb-2 text-lg font-medium text-foreground">Bug Reports</h3>
+                <h3 className="mb-2 text-lg font-medium text-foreground">SRM PYQ API Bug Reports</h3>
                 <p className="text-sm leading-relaxed text-text-muted">
-                  Found something broken? Include steps to reproduce, expected vs actual behavior, 
+                  Found something broken in the SRM question papers API? Include steps to reproduce, expected vs actual behavior, 
                   and any error messages you encountered.
                 </p>
               </div>
@@ -372,6 +379,7 @@ export default function SupportPage() {
               <div className="bezel-inner flex h-full flex-col p-6">
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/10">
                   <svg
+                    aria-label="Feature requests" role="img"
                     className="h-5 w-5 text-amber-400"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -385,9 +393,9 @@ export default function SupportPage() {
                     />
                   </svg>
                 </div>
-                <h3 className="mb-2 text-lg font-medium text-foreground">Feature Requests</h3>
+                <h3 className="mb-2 text-lg font-medium text-foreground">SRM API Feature Requests</h3>
                 <p className="text-sm leading-relaxed text-text-muted">
-                  Have an idea to improve the API? Tell us what you&apos;re building and how 
+                  Have an idea to improve the SRM question paper API? Tell us what you&apos;re building and how 
                   a new feature would help your use case.
                 </p>
               </div>
